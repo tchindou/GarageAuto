@@ -4,13 +4,26 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\GarageController;
+use App\Http\Controllers\LikeController;
 
 
 
+Route::get('/', [GarageController::class, 'index'])->name('acceuil');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/event/create', [GarageController::class, 'create'])->name('create_event');
+
+Route::get(
+    '/event',
+    [GarageController::class, 'description']
+)->name('event_desc');
+
+Route::post('/like', [LikeController::class, 'like'])->name('like');
+Route::post('/unlike', [LikeController::class, 'unlike'])->name('unlike');
+
+
+Route::post('/search', [GarageController::class, 'search'])->name('search');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

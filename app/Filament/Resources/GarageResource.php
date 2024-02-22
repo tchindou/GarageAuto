@@ -40,12 +40,6 @@ class GarageResource extends Resource
                 Forms\Components\TextInput::make('addresse')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('longitude')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('latitude')
-                    ->required()
-                    ->maxLength(255),
                 Forms\Components\TextInput::make('description')
                     ->required()
                     ->maxLength(255),
@@ -74,10 +68,6 @@ class GarageResource extends Resource
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('addresse')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('longitude')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('latitude')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')
                     ->searchable(),

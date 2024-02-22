@@ -40,18 +40,6 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
             ])
-            ->registration()
-            ->passwordReset()
-            //->emailVerification()
-            ->profile()
-            ->loginRouteSlug('login')
-            ->registrationRouteSlug('register')
-            ->passwordResetRoutePrefix('password-reset')
-            ->passwordResetRequestRouteSlug('request')
-            ->passwordResetRouteSlug('reset')
-            // ->emailVerificationRoutePrefix('email-verification')
-            // ->emailVerificationPromptRouteSlug('prompt')
-            // ->emailVerificationRouteSlug('verify')
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

@@ -18,17 +18,22 @@ class GarageFactory extends Factory
      */
     public function definition(): array
     {
+
+        $img = "https://picsum.photos/300/200?random={$this->faker->numberBetween(1, 100)}";
+
         return [
             'gerant_id' => Gerant::inRandomOrder()->first()->id,
             'name' => $this->faker->company(),
             'gar_tel' => $this->faker->phoneNumber(),
             'email' => $this->faker->unique()->safeEmail(),
             'addresse' => $this->faker->address(),
-            'longitude' => $this->faker->longitude(),
-            'latitude' => $this->faker->latitude(),
+            'map_url' => $this->faker->url(),
             'description' => $this->faker->sentence(),
-            'image' => $this->faker->imageUrl(),
-            'password' => bcrypt('password'), // Vous pouvez ajuster cette logique selon vos besoins
+            'image' => $img,
+            'password' => bcrypt('password'),
+            'valide' => $this->faker->boolean,
+            'likes' => $this->faker->numberBetween(0, 1000),
+            'boost' => $this->faker->numberBetween(0, 9),
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
             'created_at' => now(),

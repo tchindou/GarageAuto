@@ -1,3 +1,53 @@
+@import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+        html {
+                font-family: "Poppins", sans-serif, ;
+        }
+
+        * {
+                @apply transition-all;
+        }
+
+        label {
+                @apply select-none;
+        }
+
+        .form-container {
+                @apply flex min-w-full flex-col items-center gap-6 mr-5;
+        }
+
+        .input-container {
+                @apply flex flex-col w-[90%] justify-center gap-1;
+        }
+}
+
+a {
+        list-style: none;
+        text-decoration: none;
+        color: #010101;
+}
+
+.btn-wona-green {
+        background: #0ba39a;
+        color: #fff;
+        font: bolder;
+        width: 169px;
+}
+
+.nav-bar {
+        height: 60px;
+}
+
+.imglogo {
+        height: 40px;
+        width: 40px;
+}
+
+.w-40 {
+        width: 40%;
+}

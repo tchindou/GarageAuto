@@ -26,7 +26,7 @@ class GerantPanelProvider extends PanelProvider
             ->id('gerant')
             ->path('patron')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Green,
             ])
             ->discoverResources(in: app_path('Filament/Gerant/Resources'), for: 'App\\Filament\\Gerant\\Resources')
             ->discoverPages(in: app_path('Filament/Gerant/Pages'), for: 'App\\Filament\\Gerant\\Pages')

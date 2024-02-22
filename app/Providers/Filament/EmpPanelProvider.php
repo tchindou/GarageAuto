@@ -25,9 +25,8 @@ class EmpPanelProvider extends PanelProvider
         return $panel
             ->id('emp')
             ->path('employe')
-            ->spa()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Blue,
             ])
             ->discoverResources(in: app_path('Filament/Emp/Resources'), for: 'App\\Filament\\Emp\\Resources')
             ->discoverPages(in: app_path('Filament/Emp/Pages'), for: 'App\\Filament\\Emp\\Pages')
@@ -40,9 +39,7 @@ class EmpPanelProvider extends PanelProvider
                 Widgets\FilamentInfoWidget::class,
             ])
             ->login()
-            ->registration()
             ->passwordReset()
-            //->emailVerification()
             ->profile()
             ->loginRouteSlug('login')
             ->registrationRouteSlug('register')
@@ -65,6 +62,7 @@ class EmpPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->databaseNotifications();
     }
 }
