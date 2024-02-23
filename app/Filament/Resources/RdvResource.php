@@ -17,7 +17,12 @@ class RdvResource extends Resource
 {
     protected static ?string $model = Rdv::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-wrench-screwdriver';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
@@ -80,9 +85,6 @@ class RdvResource extends Resource
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -103,8 +105,6 @@ class RdvResource extends Resource
     {
         return [
             'index' => Pages\ListRdvs::route('/'),
-            'create' => Pages\CreateRdv::route('/create'),
-            'edit' => Pages\EditRdv::route('/{record}/edit'),
         ];
     }
 

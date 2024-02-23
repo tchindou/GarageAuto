@@ -17,8 +17,12 @@ class InterventionResource extends Resource
 {
     protected static ?string $model = Intervention::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-group';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
     public static function form(Form $form): Form
     {
         return $form
@@ -69,9 +73,6 @@ class InterventionResource extends Resource
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -92,8 +93,6 @@ class InterventionResource extends Resource
     {
         return [
             'index' => Pages\ListInterventions::route('/'),
-            'create' => Pages\CreateIntervention::route('/create'),
-            'edit' => Pages\EditIntervention::route('/{record}/edit'),
         ];
     }
 

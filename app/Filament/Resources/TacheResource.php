@@ -17,7 +17,12 @@ class TacheResource extends Resource
 {
     protected static ?string $model = Tache::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
@@ -86,9 +91,6 @@ class TacheResource extends Resource
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -109,8 +111,6 @@ class TacheResource extends Resource
     {
         return [
             'index' => Pages\ListTaches::route('/'),
-            'create' => Pages\CreateTache::route('/create'),
-            'edit' => Pages\EditTache::route('/{record}/edit'),
         ];
     }
 

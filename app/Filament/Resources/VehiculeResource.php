@@ -17,7 +17,12 @@ class VehiculeResource extends Resource
 {
     protected static ?string $model = Vehicule::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-truck';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
@@ -73,9 +78,6 @@ class VehiculeResource extends Resource
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -96,8 +98,6 @@ class VehiculeResource extends Resource
     {
         return [
             'index' => Pages\ListVehicules::route('/'),
-            'create' => Pages\CreateVehicule::route('/create'),
-            'edit' => Pages\EditVehicule::route('/{record}/edit'),
         ];
     }
 

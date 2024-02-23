@@ -8,6 +8,7 @@ use App\Filament\Resources\InterventionResource\Pages\ListInterventions;
 use App\Models\Rdv;
 use App\Models\Employe;
 use App\Models\Intervention;
+use App\Models\Tache;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Filament\Widgets\Concerns\InteractsWithPageTable;
@@ -39,33 +40,46 @@ class DashStat extends BaseWidget
 
         protected function getStats(): array
         {
-                $rdvCount = Rdv::count();
-                $rdvChange = $rdvCount - Rdv::where('created_at', '<', now()->subMonth())->count();
+                // Obtenez l'ID de l'employé authentifié
+                $employeId = auth()->user()->user_id;
+
+                // Utilisez l'ID de l'employé pour trouver le garage correspondant
+                $employe = Employe::find($employeId);
+
+                // Obtenez l'ID du garage
+                $garageId = $employe->garage_id;
+
+                $rdvCount = Rdv::where('garage_id', $garageId)
+                        ->count();
+                $rdvChange = $rdvCount - Rdv::where('garage_id', $garageId)->where('created_at', '<', now()->subMonth())->count();
                 $rdvIcon = $rdvChange >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down';
                 $rdvColor = $rdvChange >= 0 ? 'success' : 'danger';
                 $rdvType = $rdvChange >= 0 ? 'hausse' : 'baisse';
 
-                $employeCount = Employe::count();
-                $employeChange = $employeCount - Employe::where('created_at', '<', now()->subMonth())->count();
-                $employeIcon = $employeChange >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down';
-                $employeColor = $employeChange >= 0 ? 'success' : 'danger';
-                $employeType = $employeChange >= 0 ? 'hausse' : 'baisse';
+                $tacheCount = Tache::where('garage_id', $garageId)
+                        ->count();
+                $tacheChange = $tacheCount - Tache::where('garage_id', $garageId)->where('created_at', '<', now()->subMonth())->count();
+                $tacheIcon = $tacheChange >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down';
+                $tacheColor = $tacheChange >= 0 ? 'success' : 'danger';
+                $tacheType = $tacheChange >= 0 ? 'hausse' : 'baisse';
 
-                $interventionCount = Intervention::count();
-                $interventionChange = $interventionCount - Intervention::where('created_at', '<', now()->subMonth())->count();
+                $interventionCount = Intervention::where('garage_id', $garageId)
+                        ->count();
+                $interventionChange = $interventionCount - Intervention::where('garage_id', $garageId)->where('created_at', '<', now()->subMonth())->count();
                 $interventionIcon = $interventionChange >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down';
                 $interventionColor = $interventionChange >= 0 ? 'success' : 'danger';
                 $interventionType = $interventionChange >= 0 ? 'hausse' : 'baisse';
+
 
                 return [
                         Stat::make('Rendez-vous', $rdvCount)
                                 ->descriptionIcon($rdvIcon)
                                 ->description($rdvType . ' ' . $rdvChange . ' Rendez-vous')
                                 ->color($rdvColor),
-                        Stat::make('Employés', $employeCount)
-                                ->descriptionIcon($employeIcon)
-                                ->description($employeType . ' ' . $employeChange . ' Employés')
-                                ->color($employeColor),
+                        Stat::make('Employés', $tacheCount)
+                                ->descriptionIcon($tacheIcon)
+                                ->description($tacheType . ' ' . $tacheChange . ' Taches')
+                                ->color($tacheColor),
                         Stat::make('Interventions', $interventionCount)
                                 ->descriptionIcon($interventionIcon)
                                 ->description($interventionType . ' ' . $interventionChange . ' Interventions')

@@ -57,7 +57,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 
     public function canAccessPanel(Panel $panel): bool
     {
-        if ($this->user_type == Gerant::class or $this->type == Employe::class) {
+        if ($this->user_type == Gerant::class or $this->user_type == Employe::class or $this->user_type == Admin::class) {
             return  true;
         } else {
             return  false;

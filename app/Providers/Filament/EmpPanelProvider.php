@@ -26,8 +26,10 @@ class EmpPanelProvider extends PanelProvider
             ->id('emp')
             ->path('employe')
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => Color::Purple,
             ])
+            ->brandLogo(asset('img/logo.png'))
+            ->brandName('GarageAuto Employé')
             ->discoverResources(in: app_path('Filament/Emp/Resources'), for: 'App\\Filament\\Emp\\Resources')
             ->discoverPages(in: app_path('Filament/Emp/Pages'), for: 'App\\Filament\\Emp\\Pages')
             ->pages([
@@ -35,8 +37,8 @@ class EmpPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Emp/Widgets'), for: 'App\\Filament\\Emp\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Widgets\AccountWidget::class,
+                // Widgets\FilamentInfoWidget::class,
             ])
             ->login()
             ->passwordReset()

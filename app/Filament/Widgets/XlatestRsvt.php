@@ -31,7 +31,7 @@ class XlatestRsvt extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(Intervention::latest()->take(10))
+            ->query(Intervention::with(['garage', 'vehicule', 'tache'])->latest())
             ->defaultPaginationPageOption(10)
             ->defaultSort('created_at')
             ->columns([

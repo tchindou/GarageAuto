@@ -17,7 +17,12 @@ class PieceResource extends Resource
 {
     protected static ?string $model = Piece::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-puzzle-piece';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
@@ -72,9 +77,6 @@ class PieceResource extends Resource
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -95,8 +97,6 @@ class PieceResource extends Resource
     {
         return [
             'index' => Pages\ListPieces::route('/'),
-            'create' => Pages\CreatePiece::route('/create'),
-            'edit' => Pages\EditPiece::route('/{record}/edit'),
         ];
     }
 

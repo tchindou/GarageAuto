@@ -12,6 +12,7 @@ use App\Models\Rdv;
 use App\Models\Intervention;
 use App\Models\Vehicule;
 use App\Models\Facture;
+use App\Models\Admin;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -23,6 +24,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        Admin::factory()->count(2)->create()->each(
+            function ($client) {
+                // Créer un utilisateur associé pour chaque gerant
+                User::create([
+                    'name' => $client->name,
+                    'email' => $client->email, // ajustez l'email en fonction de votre logique
+                    'password' => $client->password, // ajustez le mot de passe en fonction de votre logique
+                    'user_type' => Admin::class,
+                    'user_id' => $client->id,
+                ]);
+            }
+        );
+
         Client::factory()->count(20)->create()->each(function ($client) {
             // Créer un utilisateur associé pour chaque gerant
             User::create([

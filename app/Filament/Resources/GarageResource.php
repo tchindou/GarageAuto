@@ -17,7 +17,12 @@ class GarageResource extends Resource
 {
     protected static ?string $model = Garage::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-home-modern';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
@@ -114,8 +119,6 @@ class GarageResource extends Resource
     {
         return [
             'index' => Pages\ListGarages::route('/'),
-            'create' => Pages\CreateGarage::route('/create'),
-            'edit' => Pages\EditGarage::route('/{record}/edit'),
         ];
     }
 

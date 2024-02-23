@@ -28,6 +28,8 @@ class GerantPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Green,
             ])
+            ->brandLogo(asset('img/logo.png'))
+            ->brandName('GarageAuto Gerant')
             ->discoverResources(in: app_path('Filament/Gerant/Resources'), for: 'App\\Filament\\Gerant\\Resources')
             ->discoverPages(in: app_path('Filament/Gerant/Pages'), for: 'App\\Filament\\Gerant\\Pages')
             ->pages([
@@ -35,8 +37,8 @@ class GerantPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Gerant/Widgets'), for: 'App\\Filament\\Gerant\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Widgets\AccountWidget::class,
+                // Widgets\FilamentInfoWidget::class,
             ])
             ->login()
             ->registration()

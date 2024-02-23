@@ -6,7 +6,7 @@ use App\Filament\Resources\ReservationResource;
 use App\Filament\Resources\ReservationResource\Pages;
 use App\Filament\Resources\ReservationResource\RelationManagers;
 use App\Models\Intervention;
-use App\Models\Reservation;
+use App\Models\Garage;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -31,7 +31,7 @@ class XlatestRsvts extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(Intervention::latest()->take(10))
+            ->query(Intervention::with(['garage', 'vehicule', 'tache'])->latest())
             ->defaultPaginationPageOption(10)
             ->defaultSort('created_at')
             ->columns([
@@ -89,14 +89,25 @@ class XlatestRsvts extends BaseWidget
 
     public static function getEloquentQuery(): Builder
     {
-        $user = Auth::user();
-        if ($user->type == 'admin') {
+        // Obtenez l'ID du gérant authentifié
+        $gerantId = auth()->user()->user_id;
+
+        // Utilisez l'ID du gérant pour trouver le garage correspondant
+        $garages = Garage::where('gerant_id', $gerantId)->get();
+
+        // Vérifiez si un garage a été trouvé
+        if ($garages->isNotEmpty()) {
+            // Obtenez l'ID du garage
+            $garageIds = $garages->pluck('id')->toArray();
+
             return parent::getEloquentQuery()
+                ->whereIn('garage_id', $garageIds)
                 ->withoutGlobalScopes([
                     SoftDeletingScope::class,
                 ]);
         }
 
+        // Si aucun garage n'a été trouvé, retournez une requête vide
         return Intervention::whereNull('id');
     }
 }

@@ -5,47 +5,111 @@ namespace App\Filament\Emp\Resources;
 use App\Filament\Emp\Resources\TacheResource\Pages;
 use App\Filament\Emp\Resources\TacheResource\RelationManagers;
 use App\Models\Tache;
+use App\Models\Garage;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Components\MarkdownEditor;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\ImageColumn;
+use App\Enums\TaskStatus;
+use App\Models\Employe;
 
 class TacheResource extends Resource
 {
     protected static ?string $model = Tache::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?int $navigationSort = 3;
+
+    protected static ?string $navigationIcon = 'heroicon-o-document';
+
+    public static function getNavigationBadge(): ?string
+    {
+        // Obtenez l'ID de l'employé authentifié
+        $employeId = auth()->user()->user_id;
+
+        // Utilisez l'ID de l'employé pour trouver le garage correspondant
+        $employe = Employe::find($employeId);
+
+        // Vérifiez si un employé a été trouvé
+        if ($employe) {
+            // Obtenez l'ID du garage
+            $garageId = $employe->garage_id;
+
+            return parent::getEloquentQuery()
+                ->where('garage_id', $garageId)
+                ->count();
+        }
+
+        // Si aucun garage n'a été trouvé, retournez une requête vide
+        return '0';
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('client_id')
+                Forms\Components\TextInput::make('garage_id')
                     ->required()
                     ->numeric(),
                 Forms\Components\TextInput::make('vehicule_id')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('employe_id')
+                Forms\Components\DatePicker::make('date_fin')
+                    ->label('Date de fin du tâche')
                     ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('date')
+                    ->format('d/m/Y')
+                    ->minDate(now())
+                    ->maxDate(now()->addYears('1')),
+                Forms\Components\TimePicker::make('time')
+                    ->Label('Heure de fin du tâche')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('time')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('description')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('images')
+                    ->format('G:i'),
+                Forms\Components\ToggleButtons::make('status')
+                    ->inline()
+                    ->options(TaskStatus::class)
+                    ->default(TaskStatus::ENCOURS)
                     ->required(),
-                Forms\Components\TextInput::make('statut')
-                    ->required()
-                    ->maxLength(255),
+                FileUpload::make('images')
+                    ->image()
+                    ->imageEditor()
+                    ->imageEditorAspectRatios([
+                        null,
+                        '16:9',
+                        '4:3',
+                        '1:1',
+                    ])
+                    ->columnSpan([
+                        'sm' => 2,
+                        'xl' => 3,
+                        '2xl' => 4,
+                    ])
+                    ->required(),
+                MarkdownEditor::make('description')
+                    ->columnSpan([
+                        'sm' => 2,
+                        'xl' => 3,
+                        '2xl' => 4,
+                    ])
+                    ->toolbarButtons([
+                        'attachFiles',
+                        'blockquote',
+                        'bold',
+                        'bulletList',
+                        'codeBlock',
+                        'heading',
+                        'italic',
+                        'link',
+                        'orderedList',
+                        'redo',
+                        'strike',
+                        'table',
+                        'undo',
+                    ]),
             ]);
     }
 
@@ -53,23 +117,30 @@ class TacheResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('client_id')
+                ImageColumn::make('image')
+                    ->size(40),
+                Tables\Columns\TextColumn::make('garage.name')
                     ->numeric()
+                    ->searchable(isIndividual: true)
                     ->sortable(),
-                Tables\Columns\TextColumn::make('vehicule_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('vehicule.modele')
+                    ->label('Vehicule')
+                    ->searchable(isIndividual: true)
                     ->sortable(),
-                Tables\Columns\TextColumn::make('employe_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('date')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('date_fin')
+                    ->label('Date de Fin')
+                    ->date()
+                    ->sortable()
+                    ->searchable(isIndividual: true),
                 Tables\Columns\TextColumn::make('time')
+                    ->label('Heure de Fin')
+                    ->time()
+                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('statut')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -116,9 +187,25 @@ class TacheResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
+        // Obtenez l'ID du gérant authentifié
+        $gerantId = auth()->user()->user_id;
+
+        // Utilisez l'ID du gérant pour trouver le garage correspondant
+        $garages = Garage::where('gerant_id', $gerantId)->get();
+
+        // Vérifiez si un garage a été trouvé
+        if ($garages->isNotEmpty()) {
+            // Obtenez l'ID du garage
+            $garageIds = $garages->pluck('id')->toArray();
+
+            return parent::getEloquentQuery()
+                ->whereIn('garage_id', $garageIds)
+                ->withoutGlobalScopes([
+                    SoftDeletingScope::class,
+                ]);
+        }
+
+        // Si aucun garage n'a été trouvé, retournez une requête vide
+        return Tache::whereNull('id');
     }
 }

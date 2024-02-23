@@ -17,7 +17,12 @@ class EmployeResource extends Resource
 {
     protected static ?string $model = Employe::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
@@ -76,16 +81,6 @@ class EmployeResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                ]),
             ]);
     }
 
@@ -100,8 +95,6 @@ class EmployeResource extends Resource
     {
         return [
             'index' => Pages\ListEmployes::route('/'),
-            'create' => Pages\CreateEmploye::route('/create'),
-            'edit' => Pages\EditEmploye::route('/{record}/edit'),
         ];
     }
 

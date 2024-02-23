@@ -5,6 +5,7 @@ namespace App\Filament\Emp\Widgets;
 use App\Filament\Resources\ReservationResource;
 use App\Filament\Resources\ReservationResource\Pages;
 use App\Filament\Resources\ReservationResource\RelationManagers;
+use App\Models\Employe;
 use App\Models\Intervention;
 use App\Models\Reservation;
 use Filament\Tables;
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 class XlatestRsvts extends BaseWidget
 {
 
-    protected static ?string $heading = 'Dernieres reservations';
+    protected static ?string $heading = 'Dernieres interventions';
 
     protected int | string | array $columnSpan = 'full';
 
@@ -31,21 +32,18 @@ class XlatestRsvts extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(Intervention::latest()->take(10))
+            ->query(Intervention::with(['garage', 'vehicule', 'tache'])->latest())
             ->defaultPaginationPageOption(10)
             ->defaultSort('created_at')
             ->columns([
+                Tables\Columns\TextColumn::make('garage.name')
+                    ->label('Garage')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('vehicule.marque')
                     ->label('Véhicule')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('vehicule.modele')
                     ->label('Modèle')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('garage.name')
-                    ->label('Garage')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('garage.gerant.name')
-                    ->label('Gérant')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tache.status')
                     ->label('Tâche')
@@ -89,14 +87,25 @@ class XlatestRsvts extends BaseWidget
 
     public static function getEloquentQuery(): Builder
     {
-        $user = Auth::user();
-        if ($user->type == 'admin') {
+        // Obtenez l'ID de l'employé authentifié
+        $employeId = auth()->user()->user_id;
+
+        // Utilisez l'ID de l'employé pour trouver le garage correspondant
+        $employe = Employe::find($employeId);
+
+        // Vérifiez si un employé a été trouvé
+        if ($employe) {
+            // Obtenez l'ID du garage
+            $garageId = $employe->garage_id;
+
             return parent::getEloquentQuery()
+                ->where('garage_id', $garageId)
                 ->withoutGlobalScopes([
                     SoftDeletingScope::class,
                 ]);
         }
 
+        // Si aucun employé n'a été trouvé, retournez une requête vide
         return Intervention::whereNull('id');
     }
 }
