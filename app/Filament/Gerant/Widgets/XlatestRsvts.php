@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
 class XlatestRsvts extends BaseWidget
 {
 
-    protected static ?string $heading = 'Dernieres reservations';
+    protected static ?string $heading = 'Dernieres interventions';
 
     protected int | string | array $columnSpan = 'full';
 
