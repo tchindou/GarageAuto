@@ -104,7 +104,8 @@ if ($data->boost >= 7) {
                 class="h-[10rem] sm:h-[100px] md:h-[200px] lg:h-[250px] w-full object-cover object-center  rounded-t-lg"
                 src="{{ $data->image }}" />
 
-            <div class="flex flex-col justify-end bg-black bg-opacity-50 absolute inset-0 h-full w-full px-1 py-1">
+            <div
+                class="flex flex-col justify-end rounded-t-lg bg-black bg-opacity-50 absolute inset-0 h-full w-full px-1 py-1">
                 <span class="md:text-4xl sm:text-3xl text-2xl text-white mb-3">{{ $data->name }}</span>
 
             </div>
@@ -113,7 +114,7 @@ if ($data->boost >= 7) {
 
             <div class="flex flex-row w-full justify-end gap-3">
                 <a href="#"
-                    class="bg-transparent border-solid cursor-pointer hover:bg-teal-500 text-black font-semibold p-1 border border-teal-500 hover:border-transparent rounded">
+                    class="bg-transparent border-solid cursor-pointer hover:bg-purple-950 text-black font-semibold p-1 border border-purple-950 hover:border-transparent rounded">
 
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-4 h-4">

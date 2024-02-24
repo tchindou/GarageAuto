@@ -190,14 +190,14 @@
                     <div class="button-container flex justify-between mt-5">
                         <div>
                             <button type="button" id="previousBtn"
-                                class="px-2 py-1 mr-2 hover:border-teal-500 active:bg-teal-300 border-gray-500 rounded-md border-solid">Precedent</button>
+                                class="px-2 py-1 mr-2 hover:border-purple-950 active:bg-teal-300 border-gray-500 rounded-md border-solid">Precedent</button>
 
                         </div>
                         <div>
                             <input type="submit" value="Submit"
-                                class="px-2 py-1 mr-2 focus:border-teal-500 hover:border-teal-500 focus:bg-teal-300 border-gray-500 rounded-md border-solid">
+                                class="px-2 py-1 mr-2 focus:border-purple-950 hover:border-purple-950 focus:bg-teal-300 border-gray-500 rounded-md border-solid">
                             <button type="button" id="nextBtn"
-                                class="px-2 py-1 mr-2 hover:border-teal-500 active:bg-teal-300 rounded-md border-gray-500 border-solid">Suivant</button>
+                                class="px-2 py-1 mr-2 hover:border-purple-950 active:bg-teal-300 rounded-md border-gray-500 border-solid">Suivant</button>
 
                         </div>
                     </div>

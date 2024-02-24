@@ -13,6 +13,8 @@ use App\Models\Facture;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -55,17 +57,27 @@ class InterventionResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('vehicule_id')
+                Select::make('vehicule_id')
+                    ->numeric()
+                    ->label('Vehicule')
+                    ->options(Vehicule::where('garage_id', Employe::find(auth()->user()->user_id)->garage_id)->pluck('plaque', 'id'))
+                    ->searchable(),
+                Hidden::make('garage_id')
+                    ->numeric()
+                    ->default(Garage::where('garage_id', Employe::find(auth()->user()->user_id)->garage_id)->pluck('name', 'id'))
+                    ->searchable(),
+                Select::make('tache_id')
+                    ->numeric()
+                    ->label('Tache')
+                    ->options(Tache::where('garage_id', Garage::where('gerant_id', auth()->user()->user_id)->first())->pluck('plaque', 'id'))
+                    ->searchable(),
+                Forms\Components\DatePicker::make('date')
+                    ->label('Date du rdv')
                     ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('garage_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('tache_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\DateTimePicker::make('date')
-                    ->required(),
+                    ->format('d/m/Y')
+                    ->minDate(now())
+                    ->maxDate(now()->addYears('1'))
+                    ->default(now()),
                 Forms\Components\Section::make('Factures')
                     ->schema([
                         Forms\Components\Repeater::make('factures')

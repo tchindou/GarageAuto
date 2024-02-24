@@ -27,7 +27,7 @@
 
                 <div class="flex flex-row w-full justify-end gap-3 mb-5">
                     <button
-                        class="bg-transparent border-solid hover:bg-teal-500 text-black font-semibold p-1 border border-teal-500 hover:border-transparent rounded">
+                        class="bg-transparent border-solid hover:bg-purple-950 text-black font-semibold p-1 border border-purple-950 hover:border-transparent rounded">
 
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-4 h-4">

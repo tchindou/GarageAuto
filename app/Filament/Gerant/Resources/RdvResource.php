@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\Toggle;
@@ -55,19 +56,23 @@ class RdvResource extends Resource
                 Forms\Components\TextInput::make('client_id')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('garage_id')
-                    ->required()
-                    ->numeric(),
+                Select::make('garage_id')
+                    ->numeric()
+                    ->label('Garage')
+                    ->options(Garage::where('gerant_id', auth()->user()->user_id)->pluck('name', 'id'))
+                    ->searchable(),
                 Forms\Components\DatePicker::make('date')
                     ->label('Date du rdv')
                     ->required()
                     ->format('d/m/Y')
                     ->minDate(now())
-                    ->maxDate(now()->addYears('1')),
+                    ->maxDate(now()->addYears('1'))
+                    ->default(now()),
                 Forms\Components\TimePicker::make('heure')
                     ->label('Heure du rdv')
                     ->required()
-                    ->format('G:i'),
+                    ->format('G:i')
+                    ->default(now()),
                 Toggle::make('valide')
                     ->onColor('success')
                     ->offColor('danger'),

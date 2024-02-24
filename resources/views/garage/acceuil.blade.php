@@ -20,13 +20,13 @@
                 @csrf
                 <input type="text" name="search" class="form-control border-gray-600" placeholder="Rechercher"
                     aria-label="Rechercher" aria-describedby="basic-addon2">
-                <span class="input-group-text border-gray-600 rounded-r-md" id="basic-addon2">
+                <span class="input-group-text bg- border-gray-600 rounded-r-md" id="basic-addon2">
                     <i class="fa fa-search" aria-hidden="true"></i>
                 </span>
             </form>
 
             <button
-                class="input-group-text flex justify-center items-center filtre gap1 bg-transparent border-solid hover:bg-teal-500 text-black font-semibold py-2 px-4 border border-teal-500 hover:border-transparent rounded">
+                class="input-group-text flex justify-center items-center filtre gap1 bg-transparent border-solid hover:bg-purple-950 text-black hover:text-white font-semibold py-2 px-4 border border-purple-950 hover:border-transparent rounded">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -38,7 +38,7 @@
         </div>
 
         <div class="filtre-items hidden mt-3 justify-between">
-            <div class="flex justify-around items-center bg-transparent border-solid hover:bg-teal-500 text-black font-semibold border border-teal-500 hover:border-transparent rounded cursor-pointer min-w-12 gap-x-1"
+            <div class="flex justify-around items-center bg-transparent border-solid hover:bg-purple-950 text-black  hover:text-white px-2 py-1 font-semibold border border-purple-950 hover:border-transparent rounded cursor-pointer min-w-12 gap-x-1"
                 id="pop-btn">
 
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -57,7 +57,7 @@
                 </div>
             </div>
 
-            <div class="flex justify-around items-center bg-transparent border-solid hover:bg-teal-500 text-black font-semibold border border-teal-500 hover:border-transparent rounded cursor-pointer min-w-12 gap-x-1"
+            <div class="flex px-2 py-1 justify-around items-center bg-transparent border-solid hover:bg-purple-950 text-black hover:text-white font-semibold border border-purple-950 hover:border-transparent rounded cursor-pointer min-w-12 gap-x-1"
                 id="nom-btn">
 
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -74,7 +74,7 @@
                 </div>
             </div>
 
-            <div class="flex justify-around items-center bg-transparent border-solid hover:bg-teal-500 text-black font-semibold border border-teal-500 hover:border-transparent rounded cursor-pointer min-w-12 gap-x-1"
+            <div class="flex px-2 py-1 justify-around items-center bg-transparent border-solid hover:bg-purple-950 text-black hover:text-white font-semibold border border-purple-950 hover:border-transparent rounded cursor-pointer min-w-12 gap-x-1"
                 id="lieux-btn">
 
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -92,7 +92,7 @@
                 </div>
             </div>
 
-            <div class="flex justify-around items-center bg-transparent border-solid hover:bg-teal-500 text-black font-semibold border border-teal-500 hover:border-transparent rounded cursor-pointer min-w-12 gap-x-1"
+            <div class="flex px-2 py-1 justify-around items-center bg-transparent border-solid hover:bg-purple-950 text-black hover:text-white font-semibold border border-purple-950 hover:border-transparent rounded cursor-pointer min-w-12 gap-x-1"
                 id="date-btn">
 
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -109,7 +109,7 @@
                 </div>
             </div>
 
-            <div class="flex justify-around items-center bg-transparent border-solid hover:bg-teal-500 text-black font-semibold border border-teal-500 hover:border-transparent rounded cursor-pointer min-w-12 gap-x-1"
+            <div class="flex px-2 py-1 justify-around items-center bg-transparent border-solid hover:bg-purple-950 text-black hover:text-white font-semibold border border-purple-950 hover:border-transparent rounded cursor-pointer min-w-12 gap-x-1"
                 id="prix-btn">
 
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"

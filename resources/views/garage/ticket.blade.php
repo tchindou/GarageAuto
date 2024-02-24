@@ -20,10 +20,10 @@
             $('.filtre').click(function() {
                 if ($('.filtre-items').hasClass('flex')) {
                     $('.filtre-items').removeClass('flex').addClass('hidden');
-                    $('.filtre').removeClass('bg-teal-500');
+                    $('.filtre').removeClass('bg-purple-950');
                 } else {
                     $('.filtre-items').removeClass('hidden').addClass('flex');
-                    $('.filtre').addClass('bg-teal-500');
+                    $('.filtre').addClass('bg-purple-950');
                 }
             });
 
