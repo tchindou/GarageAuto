@@ -8,6 +8,8 @@ use App\Models\Employe;
 use App\Models\Piece;
 use App\Models\Garage;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -48,21 +50,32 @@ class PieceResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('garage_id')
-                    ->required()
-                    ->numeric(),
+                Hidden::make('garage_id')
+                    ->default(Garage::where('id', Employe::find(auth()->user()->user_id)->garage_id)->first()->id),
                 Forms\Components\TextInput::make('nom')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('description')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\FileUpload::make('image')
-                    ->image()
-                    ->required(),
                 Forms\Components\TextInput::make('prix')
                     ->required()
                     ->numeric(),
+                Forms\Components\TextInput::make('description')
+                    ->required()
+                    ->maxLength(255),
+                FileUpload::make('images')
+                    ->image()
+                    ->imageEditor()
+                    ->imageEditorAspectRatios([
+                        null,
+                        '16:9',
+                        '4:3',
+                        '1:1',
+                    ])
+                    ->columnSpan([
+                        'sm' => 2,
+                        'xl' => 3,
+                        '2xl' => 4,
+                    ])
+                    ->required(),
             ]);
     }
 
@@ -77,7 +90,8 @@ class PieceResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\ImageColumn::make('image')
+                    ->size(40),
                 Tables\Columns\TextColumn::make('prix')
                     ->numeric()
                     ->sortable(),
@@ -98,7 +112,11 @@ class PieceResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -61,7 +61,7 @@ class RdvChart extends ChartWidget
                 [
                     'label' => 'Stat Rdvs',
                     'data' => array_values($rdvsData),
-                    'borderColor' => 'blue',
+                    'borderColor' => 'purple',
                 ],
             ],
         ];

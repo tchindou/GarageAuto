@@ -48,7 +48,7 @@ class RsvtChart extends ChartWidget
                 [
                     'label' => 'Stat Taches',
                     'data' => array_values($tachesData),
-                    'borderColor' => 'blue',
+                    'borderColor' => 'green',
                 ],
                 // [
                 //     'label' => 'Stat Employes',

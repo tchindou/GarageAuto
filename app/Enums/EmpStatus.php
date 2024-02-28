@@ -12,7 +12,7 @@ enum EmpStatus: string implements HasColor, HasIcon, HasLabel
 
         case EX = 'ex';
 
-        case MUTE = 'muté';
+        case MUTE = 'mute';
 
         public function getLabel(): string
         {

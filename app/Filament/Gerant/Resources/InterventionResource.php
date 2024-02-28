@@ -56,17 +56,14 @@ class InterventionResource extends Resource
         return $form
             ->schema([
                 Select::make('vehicule_id')
-                    ->numeric()
                     ->label('Vehicule')
                     ->options(Vehicule::where('garage_id', Garage::where('gerant_id', auth()->user()->user_id)->first())->pluck('plaque', 'id'))
                     ->searchable(),
                 Select::make('garage_id')
-                    ->numeric()
                     ->label('Garage')
                     ->options(Garage::where('gerant_id', auth()->user()->user_id)->pluck('name', 'id'))
                     ->searchable(),
                 Select::make('tache_id')
-                    ->numeric()
                     ->label('Tache')
                     ->options(Tache::where('garage_id', Garage::where('gerant_id', auth()->user()->user_id)->first())->pluck('plaque', 'id'))
                     ->searchable(),
@@ -134,7 +131,10 @@ class InterventionResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

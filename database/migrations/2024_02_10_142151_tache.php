@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('garage_id')->constrained('employe')->cascadeOnDelete();
             $table->foreignId('vehicule_id')->constrained('vehicule')->cascadeOnDelete();
+            $table->string('name');
             $table->string('date_fin');
             $table->string('time')->nullable();
             $table->string('description');

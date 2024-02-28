@@ -58,31 +58,24 @@ class InterventionResource extends Resource
         return $form
             ->schema([
                 Select::make('vehicule_id')
-                    ->numeric()
                     ->label('Vehicule')
+                    ->preload()
                     ->options(Vehicule::where('garage_id', Employe::find(auth()->user()->user_id)->garage_id)->pluck('plaque', 'id'))
                     ->searchable(),
                 Hidden::make('garage_id')
-                    ->numeric()
-                    ->default(Garage::where('garage_id', Employe::find(auth()->user()->user_id)->garage_id)->pluck('name', 'id'))
-                    ->searchable(),
+                    ->default(Garage::where('id', Employe::find(auth()->user()->user_id)->garage_id)->first()->id),
                 Select::make('tache_id')
-                    ->numeric()
                     ->label('Tache')
-                    ->options(Tache::where('garage_id', Garage::where('gerant_id', auth()->user()->user_id)->first())->pluck('plaque', 'id'))
+                    ->options(Tache::where('garage_id', Employe::find(auth()->user()->user_id)->garage_id)->pluck('name', 'id'))
+                    ->preload()
                     ->searchable(),
-                Forms\Components\DatePicker::make('date')
-                    ->label('Date du rdv')
-                    ->required()
-                    ->format('d/m/Y')
-                    ->minDate(now())
-                    ->maxDate(now()->addYears('1'))
-                    ->default(now()),
                 Forms\Components\Section::make('Factures')
                     ->schema([
                         Forms\Components\Repeater::make('factures')
                             ->relationship()
                             ->schema([
+                                Hidden::make('garage_id')
+                                    ->default(Garage::where('id', Employe::find(auth()->user()->user_id)->garage_id)->first()->id),
                                 Forms\Components\TextInput::make('piece')
                                     ->label('Piece ou Service')
                                     ->required(),
@@ -135,7 +128,10 @@ class InterventionResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

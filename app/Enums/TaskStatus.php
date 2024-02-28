@@ -8,11 +8,11 @@ use Filament\Support\Contracts\HasLabel;
 
 enum TaskStatus: string implements HasColor, HasIcon, HasLabel
 {
-        case ENCOURS = 'en cours';
+        case ENCOURS = 'encours';
 
         case FINI = 'fini';
 
-        case ANNULE = 'annulé';
+        case ANNULE = 'annule';
 
         public function getLabel(): string
         {

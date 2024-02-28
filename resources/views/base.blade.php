@@ -26,7 +26,7 @@
 
         <div class="flex items-center justify-between px-4 w-full">
             <div class="">
-                <a href="/" class=" flex items-center fs-5 ">
+                <a href="/" class=" flex items-center fs-5">
                     <img src="{{ asset('img/logo.png') }}" alt="" class="imglogo"><span>GarageAuto</span>
                 </a>
             </div>

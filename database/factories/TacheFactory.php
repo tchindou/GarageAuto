@@ -16,6 +16,7 @@ class TacheFactory extends Factory
         return [
             'garage_id' => Garage::inRandomOrder()->first()->id,
             'vehicule_id' => Vehicule::inRandomOrder()->first()->id,
+            'name' => $this->faker->name(),
             'date_fin' => $this->faker->date(),
             'time' => $this->faker->time(),
             'description' => $this->faker->sentence(),

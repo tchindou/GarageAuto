@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\Toggle;
@@ -57,9 +58,8 @@ class RdvResource extends Resource
                 Forms\Components\TextInput::make('client_id')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('garage_id')
-                    ->required()
-                    ->numeric(),
+                Hidden::make('garage_id')
+                    ->default(Garage::where('id', Employe::find(auth()->user()->user_id)->garage_id)->first()->id),
                 Forms\Components\DatePicker::make('date')
                     ->label('Date du rdv')
                     ->required()
@@ -154,7 +154,10 @@ class RdvResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

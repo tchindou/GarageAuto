@@ -18,6 +18,9 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Columns\ImageColumn;
 use App\Enums\TaskStatus;
 use App\Models\Employe;
+use App\Models\Vehicule;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
 
 class TacheResource extends Resource
 {
@@ -53,12 +56,17 @@ class TacheResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('garage_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('vehicule_id')
-                    ->required()
-                    ->numeric(),
+                Hidden::make('garage_id')
+                    ->default(Garage::where('id', Employe::find(auth()->user()->user_id)->garage_id)->first()->id),
+                Forms\Components\TextInput::make('name')
+                    ->label('Nom du tâche')
+                    ->unique()
+                    ->required(),
+                Select::make('vehicule_id')
+                    ->label('Vehicule')
+                    ->preload()
+                    ->options(Vehicule::where('garage_id', Employe::find(auth()->user()->user_id)->garage_id)->pluck('plaque', 'id'))
+                    ->searchable(),
                 Forms\Components\DatePicker::make('date_fin')
                     ->label('Date de fin du tâche')
                     ->required()
@@ -74,7 +82,7 @@ class TacheResource extends Resource
                     ->options(TaskStatus::class)
                     ->default(TaskStatus::ENCOURS)
                     ->required(),
-                FileUpload::make('images')
+                FileUpload::make('image')
                     ->image()
                     ->imageEditor()
                     ->imageEditorAspectRatios([
@@ -109,7 +117,8 @@ class TacheResource extends Resource
                         'strike',
                         'table',
                         'undo',
-                    ]),
+                    ])
+                    ->required(),
             ]);
     }
 
@@ -119,6 +128,10 @@ class TacheResource extends Resource
             ->columns([
                 ImageColumn::make('image')
                     ->size(40),
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Nom de tâche')
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('garage.name')
                     ->numeric()
                     ->searchable(isIndividual: true)
@@ -158,7 +171,11 @@ class TacheResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -187,19 +204,19 @@ class TacheResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        // Obtenez l'ID du gérant authentifié
-        $gerantId = auth()->user()->user_id;
+        // Obtenez l'ID de l'employé authentifié
+        $employeId = auth()->user()->user_id;
 
-        // Utilisez l'ID du gérant pour trouver le garage correspondant
-        $garages = Garage::where('gerant_id', $gerantId)->get();
+        // Utilisez l'ID de l'employé pour trouver le garage correspondant
+        $employe = Employe::find($employeId);
 
-        // Vérifiez si un garage a été trouvé
-        if ($garages->isNotEmpty()) {
+        // Vérifiez si un employé a été trouvé
+        if ($employe) {
             // Obtenez l'ID du garage
-            $garageIds = $garages->pluck('id')->toArray();
+            $garageId = $employe->garage_id;
 
             return parent::getEloquentQuery()
-                ->whereIn('garage_id', $garageIds)
+                ->where('garage_id', $garageId)
                 ->withoutGlobalScopes([
                     SoftDeletingScope::class,
                 ]);

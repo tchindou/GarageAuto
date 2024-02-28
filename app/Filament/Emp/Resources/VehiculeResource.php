@@ -4,10 +4,13 @@ namespace App\Filament\Emp\Resources;
 
 use App\Filament\Emp\Resources\VehiculeResource\Pages;
 use App\Filament\Emp\Resources\VehiculeResource\RelationManagers;
+use App\Models\Client;
 use App\Models\Employe;
 use App\Models\Vehicule;
 use App\Models\Garage;
 use Filament\Forms;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -48,12 +51,13 @@ class VehiculeResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('garage_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('client_id')
-                    ->required()
-                    ->numeric(),
+                Hidden::make('garage_id')
+                    ->default(Garage::where('id', Employe::find(auth()->user()->user_id)->garage_id)->first()->id),
+                Select::make('client_id')
+                    ->label('Client')
+                    ->options(Client::all()->pluck('tel', 'id'))
+                    ->preload()
+                    ->searchable(),
                 Forms\Components\TextInput::make('marque')
                     ->required()
                     ->maxLength(255),
@@ -70,11 +74,9 @@ class VehiculeResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('garage_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('client_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('client.name')
+                    ->label('Client')
+                    ->searchable(isIndividual: true)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('marque')
                     ->searchable(),
@@ -99,7 +101,11 @@ class VehiculeResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

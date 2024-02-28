@@ -62,7 +62,7 @@ class TaskChart extends ChartWidget
                 [
                     'label' => 'Stat Employes',
                     'data' => array_values($tachesData),
-                    'borderColor' => 'red',
+                    'borderColor' => 'yellow',
                 ],
             ],
         ];

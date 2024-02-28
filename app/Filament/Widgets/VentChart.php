@@ -48,7 +48,7 @@ class VentChart extends ChartWidget
                 [
                     'label' => 'Stat Employes',
                     'data' => array_values($employesData),
-                    'borderColor' => 'red',
+                    'borderColor' => 'purple',
                 ],
             ],
         ];
